@@ -130,3 +130,28 @@ To learn more about React Native, take a look at the following resources:
 - [Learn the Basics](https://reactnative.dev/docs/getting-started) - a **guided tour** of the React Native **basics**.
 - [Blog](https://reactnative.dev/blog) - read the latest official React Native **Blog** posts.
 - [`@facebook/react-native`](https://github.com/facebook/react-native) - the Open Source; GitHub **repository** for React Native.
+
+
+
+### Notes:
+
+ - Add next configuration in /node_modules/react-native-vector-icons/fonts.gradle if there is an error with the dependencie.
+
+    android.applicationVariants.all { def variant ->
+        def targetName = variant.name.capitalize()
+
+        def lintAnalyzeDebugTask = tasks.findByName("lintAnalyzeDebug")
+        if (lintAnalyzeDebugTask) {
+            lintAnalyzeDebugTask.dependsOn(fontCopyTask)
+            lintAnalyzeDebugTask.mustRunAfter(fontCopyTask)
+        }
+
+        def lintVitalAnalyzeReleaseTask = tasks.findByName("lintVitalAnalyzeRelease")
+        if (lintVitalAnalyzeReleaseTask) {
+            lintVitalAnalyzeReleaseTask.dependsOn(fontCopyTask)
+            lintVitalAnalyzeReleaseTask.mustRunAfter(fontCopyTask)
+        }
+
+        def generateAssetsTask = tasks.findByName("generate${targetName}Assets")
+        generateAssetsTask.dependsOn(fontCopyTask)
+    }
